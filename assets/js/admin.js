@@ -1,81 +1,66 @@
-﻿// Админ-функции для сайта
-function addNewSubject() {
+﻿// Простые админ-функции
+window.addNewSubject = function() {
     const name = document.getElementById('subjectName').value.trim();
     const teacher = document.getElementById('teacherName').value.trim();
     
     if (!name || !teacher) {
-        alert('Заполните название предмета и имя преподавателя!');
+        alert('Заполните оба поля!');
         return;
     }
     
-    if (window.SubjectData && window.SubjectData.addSubject) {
-        window.SubjectData.addSubject({
-            name: name,
-            teacher: teacher,
-            files: []
-        });
-        
-        alert(`Предмет "${name}" добавлен!`);
-        document.getElementById('subjectName').value = '';
-        document.getElementById('teacherName').value = '';
-        
-        // Обновляем отображение без перезагрузки
-        if (window.renderSubjects) {
-            window.renderSubjects();
-        } else {
-            location.reload();
-        }
-    } else {
-        alert('Ошибка: данные не загружены!');
-        console.error('SubjectData не найден:', window.SubjectData);
-    }
-}
-
-function deleteSubject(id) {
-    if (!confirm('Удалить этот предмет? Все файлы будут удалены.')) return;
+    // Просто добавляем в localStorage
+    const subjects = JSON.parse(localStorage.getItem('subjects_data') || '[]');
+    subjects.push({
+        id: Date.now(),
+        name: name,
+        teacher: teacher,
+        files: [],
+        createdAt: new Date().toISOString()
+    });
     
-    if (window.SubjectData && window.SubjectData.deleteSubject(id)) {
-        alert('Предмет удален!');
-        // Обновляем отображение без перезагрузки
-        if (window.renderSubjects) {
-            window.renderSubjects();
-        } else {
-            location.reload();
-        }
-    } else {
-        alert('Ошибка при удалении!');
+    localStorage.setItem('subjects_data', JSON.stringify(subjects));
+    alert('Добавлено!');
+    document.getElementById('subjectName').value = '';
+    document.getElementById('teacherName').value = '';
+    
+    // Обновляем если есть функция
+    if (typeof renderSubjects === 'function') {
+        renderSubjects();
     }
-}
+};
 
-function editSubject(id) {
-    const subject = window.SubjectData ? window.SubjectData.getSubjectById(id) : null;
+window.deleteSubject = function(id) {
+    if (!confirm('Удалить предмет?')) return;
+    
+    const subjects = JSON.parse(localStorage.getItem('subjects_data') || '[]');
+    const filtered = subjects.filter(s => s.id !== id);
+    localStorage.setItem('subjects_data', JSON.stringify(filtered));
+    alert('Удалено!');
+    
+    if (typeof renderSubjects === 'function') {
+        renderSubjects();
+    }
+};
+
+window.editSubject = function(id) {
+    const subjects = JSON.parse(localStorage.getItem('subjects_data') || '[]');
+    const subject = subjects.find(s => s.id === id);
+    
     if (!subject) return;
     
-    const newName = prompt('Новое название предмета:', subject.name);
+    const newName = prompt('Название:', subject.name);
     if (!newName) return;
     
-    const newTeacher = prompt('Имя преподавателя:', subject.teacher);
+    const newTeacher = prompt('Преподаватель:', subject.teacher);
     
-    if (window.SubjectData.updateSubject(id, {
-        name: newName,
-        teacher: newTeacher
-    })) {
-        alert('Предмет обновлен!');
-        // Обновляем отображение без перезагрузки
-        if (window.renderSubjects) {
-            window.renderSubjects();
-        } else {
-            location.reload();
-        }
+    const updated = subjects.map(s => 
+        s.id === id ? {...s, name: newName, teacher: newTeacher} : s
+    );
+    
+    localStorage.setItem('subjects_data', JSON.stringify(updated));
+    alert('Обновлено!');
+    
+    if (typeof renderSubjects === 'function') {
+        renderSubjects();
     }
-}
-
-// Делаем функции глобальными
-window.addNewSubject = addNewSubject;
-window.deleteSubject = deleteSubject;
-window.editSubject = editSubject;
-
-// Экспортируем renderSubjects если есть
-if (typeof renderSubjects !== 'undefined') {
-    window.renderSubjects = renderSubjects;
-}
+};

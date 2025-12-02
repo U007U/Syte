@@ -174,7 +174,8 @@
     <!-- JavaScript -->
     <script>
         // Глобальные переменные
-        let isAdminMode = false;
+        // Сохраняем состояние админки в localStorage
+let isAdminMode = localStorage.getItem("isAdminMode") === "true";
 
         // Динамическое отображение предметов
         window.renderSubjects = function() {
@@ -409,6 +410,8 @@
     <script src="assets/js/data.js"></script>
 </body>
 </html>
+
+
 
 
 

@@ -1,7 +1,4 @@
-# Удалите старый файл и создайте новый
-Remove-Item index.html -Force
-
-@'
+﻿
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -35,6 +32,22 @@ Remove-Item index.html -Force
             box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
             margin: 1rem 0; 
         }
+        .admin-buttons { 
+            margin-top: 1rem; 
+            padding-top: 1rem; 
+            border-top: 1px solid #eee; 
+            display: none; 
+        }
+        .admin-buttons button { 
+            margin-right: 10px; 
+            padding: 5px 10px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+        }
+        .btn-edit { background: #4CAF50; color: white; }
+        .btn-delete { background: #f44336; color: white; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
@@ -60,12 +73,12 @@ Remove-Item index.html -Force
         <div class="stats" id="stats">
             <div class="stat-card">
                 <i class="fas fa-book-open"></i>
-                <h3 id="totalSubjects">2</h3>
+                <h3 id="totalSubjects">0</h3>
                 <p>Предметов</p>
             </div>
             <div class="stat-card">
                 <i class="fas fa-file-alt"></i>
-                <h3 id="totalFiles">4</h3>
+                <h3 id="totalFiles">0</h3>
                 <p>Файлов</p>
             </div>
             <div class="stat-card">
@@ -77,103 +90,7 @@ Remove-Item index.html -Force
 
         <!-- Сетка предметов -->
         <div id="subjectsGrid" class="subjects-grid">
-            <!-- Пример предмета 1 -->
-            <div class="subject-card">
-                <div class="subject-header">
-                    <div>
-                        <h3 class="subject-title">Налоги и налогообложение</h3>
-                        <p class="subject-teacher">
-                            <i class="fas fa-chalkboard-teacher"></i>
-                            Иванов Иван Иванович
-                        </p>
-                    </div>
-                    <span class="subject-badge">2 файла</span>
-                </div>
-                
-                <div class="file-list">
-                    <div class="file-item">
-                        <div class="file-icon">
-                            <i class="fas fa-file-word"></i>
-                        </div>
-                        <div class="file-info">
-                            <span class="file-name">Темы рефератов.docx</span>
-                            <p class="file-desc">Список тем для рефератов. Выберите свою тему.</p>
-                        </div>
-                        <a href="#" class="download-btn">
-                            <i class="fas fa-download"></i> Скачать
-                        </a>
-                    </div>
-                    
-                    <div class="file-item">
-                        <div class="file-icon">
-                            <i class="fas fa-file-pdf"></i>
-                        </div>
-                        <div class="file-info">
-                            <span class="file-name">Задание на эссе.pdf</span>
-                            <p class="file-desc">Требования и методические указания для написания эссе</p>
-                        </div>
-                        <a href="#" class="download-btn">
-                            <i class="fas fa-download"></i> Скачать
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="subject-footer">
-                    <small class="text-muted">
-                        <i class="far fa-clock"></i>
-                        Обновлено: 15 декабря 2024
-                    </small>
-                </div>
-            </div>
-
-            <!-- Пример предмета 2 -->
-            <div class="subject-card">
-                <div class="subject-header">
-                    <div>
-                        <h3 class="subject-title">Экономика предприятия</h3>
-                        <p class="subject-teacher">
-                            <i class="fas fa-chalkboard-teacher"></i>
-                            Петрова Мария Сергеевна
-                        </p>
-                    </div>
-                    <span class="subject-badge">2 файла</span>
-                </div>
-                
-                <div class="file-list">
-                    <div class="file-item">
-                        <div class="file-icon">
-                            <i class="fas fa-file-word"></i>
-                        </div>
-                        <div class="file-info">
-                            <span class="file-name">Курсовая работа.docx</span>
-                            <p class="file-desc">Темы и требования к курсовой работе</p>
-                        </div>
-                        <a href="#" class="download-btn">
-                            <i class="fas fa-download"></i> Скачать
-                        </a>
-                    </div>
-                    
-                    <div class="file-item">
-                        <div class="file-icon">
-                            <i class="fas fa-file-excel"></i>
-                        </div>
-                        <div class="file-info">
-                            <span class="file-name">Расчеты.xlsx</span>
-                            <p class="file-desc">Шаблон для экономических расчетов</p>
-                        </div>
-                        <a href="#" class="download-btn">
-                            <i class="fas fa-download"></i> Скачать
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="subject-footer">
-                    <small class="text-muted">
-                        <i class="far fa-clock"></i>
-                        Обновлено: 10 декабря 2024
-                    </small>
-                </div>
-            </div>
+            <!-- Карточки будут сгенерированы через JavaScript -->
         </div>
 
         <!-- Инструкция для студентов -->
@@ -256,16 +173,142 @@ Remove-Item index.html -Force
 
     <!-- JavaScript -->
     <script>
-        // Простые функции для демонстрации
+        // Глобальные переменные
+        let isAdminMode = false;
+
+        // Динамическое отображение предметов
+        function renderSubjects() {
+            const subjects = window.SubjectData ? window.SubjectData.getSubjects() : [];
+            const container = document.getElementById('subjectsGrid');
+            
+            if (!container) return;
+            
+            // Обновляем статистику
+            const totalSubjects = subjects.length;
+            const totalFiles = subjects.reduce((sum, subject) => sum + (subject.files ? subject.files.length : 0), 0);
+            
+            document.getElementById('totalSubjects').textContent = totalSubjects;
+            document.getElementById('totalFiles').textContent = totalFiles;
+            
+            // Очищаем контейнер
+            container.innerHTML = '';
+            
+            if (totalSubjects === 0) {
+                container.innerHTML = `
+                    <div class="no-subjects">
+                        <i class="fas fa-book-open fa-3x"></i>
+                        <h3>Пока нет предметов</h3>
+                        <p>Администратор добавит задания скоро</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Генерируем карточки
+            subjects.forEach(subject => {
+                const card = document.createElement('div');
+                card.className = 'subject-card';
+                card.dataset.id = subject.id;
+                
+                card.innerHTML = `
+                    <div class="subject-header">
+                        <div>
+                            <h3 class="subject-title">${escapeHtml(subject.name)}</h3>
+                            <p class="subject-teacher">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                                ${escapeHtml(subject.teacher)}
+                            </p>
+                        </div>
+                        <span class="subject-badge">${subject.files ? subject.files.length : 0} файлов</span>
+                    </div>
+                    
+                    ${subject.files && subject.files.length > 0 ? `
+                        <div class="file-list">
+                            ${subject.files.map(file => `
+                                <div class="file-item">
+                                    <div class="file-icon">
+                                        ${getFileIcon(file.filename)}
+                                    </div>
+                                    <div class="file-info">
+                                        <span class="file-name">${escapeHtml(file.name)}</span>
+                                        <p class="file-desc">${escapeHtml(file.desc)}</p>
+                                    </div>
+                                    <a href="files/${encodeURIComponent(file.filename)}" 
+                                       class="download-btn" 
+                                       download 
+                                       target="_blank">
+                                        <i class="fas fa-download"></i> Скачать
+                                    </a>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : '<p class="no-files">Файлы пока не добавлены</p>'}
+                    
+                    <div class="admin-buttons" id="admin-buttons-${subject.id}" style="display: ${isAdminMode ? 'block' : 'none'}">
+                        <button onclick="editSubject(${subject.id})" class="btn-edit">
+                            <i class="fas fa-edit"></i> Редактировать
+                        </button>
+                        <button onclick="deleteSubject(${subject.id})" class="btn-delete">
+                            <i class="fas fa-trash"></i> Удалить
+                        </button>
+                    </div>
+                    
+                    <div class="subject-footer">
+                        <small class="text-muted">
+                            <i class="far fa-clock"></i>
+                            Обновлено: ${subject.createdAt ? new Date(subject.createdAt).toLocaleDateString('ru-RU') : 'Недавно'}
+                        </small>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+
+        // Функции для работы с файлами
+        function getFileIcon(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            const icons = {
+                'doc': 'fas fa-file-word',
+                'docx': 'fas fa-file-word',
+                'pdf': 'fas fa-file-pdf',
+                'txt': 'fas fa-file-alt',
+                'xls': 'fas fa-file-excel',
+                'xlsx': 'fas fa-file-excel',
+                'ppt': 'fas fa-file-powerpoint',
+                'pptx': 'fas fa-file-powerpoint',
+                'zip': 'fas fa-file-archive',
+                'rar': 'fas fa-file-archive'
+            };
+            return `<i class="${icons[ext] || 'fas fa-file'}"></i>`;
+        }
+
+        // Экранирование HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Админ-функции
         function toggleAdmin() {
+            if (isAdminMode) {
+                logoutAdmin();
+                return;
+            }
+            
             const password = prompt('Введите пароль администратора:');
-            if (password === 'admin123') {
-                document.getElementById('adminPanel').classList.toggle('hidden');
-                const btn = document.getElementById('adminToggle');
-                btn.classList.toggle('active');
-                btn.innerHTML = btn.classList.contains('active') 
-                    ? '<i class="fas fa-user-cog"></i>' 
-                    : '<i class="fas fa-user-shield"></i>';
+            if (window.SubjectData && window.SubjectData.checkAdminPassword(password)) {
+                isAdminMode = true;
+                document.getElementById('adminPanel').classList.remove('hidden');
+                document.getElementById('adminToggle').innerHTML = '<i class="fas fa-user-cog"></i>';
+                document.getElementById('adminToggle').classList.add('active');
+                
+                // Показываем кнопки админа
+                document.querySelectorAll('.admin-buttons').forEach(btn => {
+                    btn.style.display = 'block';
+                });
+                
                 alert('Режим администратора активирован!');
             } else if (password) {
                 alert('Неверный пароль!');
@@ -273,37 +316,96 @@ Remove-Item index.html -Force
         }
         
         function logoutAdmin() {
+            isAdminMode = false;
             document.getElementById('adminPanel').classList.add('hidden');
-            document.getElementById('adminToggle').classList.remove('active');
             document.getElementById('adminToggle').innerHTML = '<i class="fas fa-user-shield"></i>';
+            document.getElementById('adminToggle').classList.remove('active');
+            
+            // Скрываем кнопки админа
+            document.querySelectorAll('.admin-buttons').forEach(btn => {
+                btn.style.display = 'none';
+            });
+            
             alert('Вы вышли из режима администратора');
         }
         
         function addSubject() {
-            const name = document.getElementById('subjectName').value;
-            const teacher = document.getElementById('teacherName').value;
+            const name = document.getElementById('subjectName').value.trim();
+            const teacher = document.getElementById('teacherName').value.trim();
             
             if (!name || !teacher) {
                 alert('Заполните название предмета и имя преподавателя!');
                 return;
             }
             
-            alert(`Предмет "${name}" добавлен!`);
-            document.getElementById('subjectName').value = '';
-            document.getElementById('teacherName').value = '';
+            if (window.SubjectData) {
+                window.SubjectData.addSubject({
+                    name: name,
+                    teacher: teacher,
+                    files: []
+                });
+                
+                alert(`Предмет "${name}" добавлен!`);
+                document.getElementById('subjectName').value = '';
+                document.getElementById('teacherName').value = '';
+                
+                // Обновляем отображение
+                renderSubjects();
+            } else {
+                alert('Ошибка: данные не загружены');
+            }
+        }
+        
+        function deleteSubject(id) {
+            if (!confirm('Удалить этот предмет? Все файлы будут удалены.')) return;
+            
+            if (window.SubjectData && window.SubjectData.deleteSubject(id)) {
+                alert('Предмет удален!');
+                renderSubjects();
+            } else {
+                alert('Ошибка при удалении!');
+            }
+        }
+        
+        function editSubject(id) {
+            const subject = window.SubjectData ? window.SubjectData.getSubjectById(id) : null;
+            if (!subject) return;
+            
+            const newName = prompt('Новое название предмета:', subject.name);
+            if (!newName) return;
+            
+            const newTeacher = prompt('Имя преподавателя:', subject.teacher);
+            
+            if (window.SubjectData.updateSubject(id, {
+                name: newName,
+                teacher: newTeacher
+            })) {
+                alert('Предмет обновлен!');
+                renderSubjects();
+            }
         }
         
         // Показать дату обновления
         document.getElementById('lastUpdate').textContent = 
             'Последнее обновление: ' + new Date().toLocaleDateString('ru-RU');
+            
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ждем загрузки данных
+            setTimeout(() => {
+                renderSubjects();
+                
+                // Слушаем изменения в localStorage
+                window.addEventListener('storage', (e) => {
+                    if (e.key === 'subjects_data') {
+                        renderSubjects();
+                    }
+                });
+            }, 100);
+        });
     </script>
     
     <!-- Подключаем внешние JS файлы -->
     <script src="assets/js/data.js"></script>
-    <script src="assets/js/admin.js"></script>
-    <script src="assets/js/main.js"></script>
 </body>
 </html>
-'@ | Out-File -FilePath "index.html" -Encoding UTF8
-
-Write-Host "✅ index.html обновлен с полным содержимым" -ForegroundColor Green

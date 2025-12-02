@@ -1,4 +1,4 @@
-/* Основные переменные */
+﻿/* РћСЃРЅРѕРІРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ */
 :root {
     --primary: #4f46e5;
     --primary-dark: #4338ca;
@@ -16,7 +16,7 @@
     --transition: all 0.3s ease;
 }
 
-/* Сброс стилей */
+/* РЎР±СЂРѕСЃ СЃС‚РёР»РµР№ */
 * {
     margin: 0;
     padding: 0;
@@ -38,7 +38,7 @@ body {
     padding: 0 20px;
 }
 
-/* Шапка */
+/* РЁР°РїРєР° */
 .header {
     background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
     color: white;
@@ -88,7 +88,7 @@ body {
     z-index: 1;
 }
 
-/* Статистика */
+/* РЎС‚Р°С‚РёСЃС‚РёРєР° */
 .stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -128,7 +128,7 @@ body {
     font-size: 0.95rem;
 }
 
-/* Сетка предметов */
+/* РЎРµС‚РєР° РїСЂРµРґРјРµС‚РѕРІ */
 .subjects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -195,7 +195,7 @@ body {
     font-weight: 500;
 }
 
-/* Файлы */
+/* Р¤Р°Р№Р»С‹ */
 .file-list {
     margin: 1.5rem 0;
 }
@@ -288,7 +288,7 @@ body {
     gap: 0.5rem;
 }
 
-/* Информационная карточка */
+/* РРЅС„РѕСЂРјР°С†РёРѕРЅРЅР°СЏ РєР°СЂС‚РѕС‡РєР° */
 .info-card {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -315,7 +315,7 @@ body {
     padding-left: 0.5rem;
 }
 
-/* Админ-панель */
+/* РђРґРјРёРЅ-РїР°РЅРµР»СЊ */
 .admin-panel {
     background: var(--card-bg);
     border-radius: var(--radius);
@@ -478,7 +478,7 @@ body {
     color: var(--danger);
 }
 
-/* Подвал */
+/* РџРѕРґРІР°Р» */
 .footer {
     background: var(--dark);
     color: white;
@@ -525,7 +525,7 @@ body {
     text-decoration: underline;
 }
 
-/* Кнопка админа */
+/* РљРЅРѕРїРєР° Р°РґРјРёРЅР° */
 .admin-toggle {
     position: fixed;
     bottom: 30px;
@@ -557,7 +557,7 @@ body {
     transform: rotate(360deg);
 }
 
-/* Адаптивность */
+/* РђРґР°РїС‚РёРІРЅРѕСЃС‚СЊ */
 @media (max-width: 768px) {
     .container {
         padding: 0 15px;
@@ -641,7 +641,7 @@ body {
     }
 }
 
-/* Анимации */
+/* РђРЅРёРјР°С†РёРё */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -661,7 +661,7 @@ body {
     animation: fadeIn 0.6s ease-out 0.2s both;
 }
 
-/* Утилиты */
+/* РЈС‚РёР»РёС‚С‹ */
 .hidden {
     display: none !important;
 }

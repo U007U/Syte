@@ -1,7 +1,7 @@
-// Админ-панель
+﻿// РђРґРјРёРЅ-РїР°РЅРµР»СЊ
 let isAdmin = false;
 
-// Проверка авторизации
+// РџСЂРѕРІРµСЂРєР° Р°РІС‚РѕСЂРёР·Р°С†РёРё
 function checkAuth() {
     const saved = localStorage.getItem('admin_auth');
     if (saved && Date.now() < JSON.parse(saved).expires) {
@@ -11,51 +11,51 @@ function checkAuth() {
     updateUI();
 }
 
-// Вход в админку
+// Р’С…РѕРґ РІ Р°РґРјРёРЅРєСѓ
 function login() {
-    const password = prompt('Введите пароль администратора:');
+    const password = prompt('Р’РІРµРґРёС‚Рµ РїР°СЂРѕР»СЊ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂР°:');
     if (window.SubjectData.checkAdminPassword(password)) {
         isAdmin = true;
         localStorage.setItem('admin_auth', JSON.stringify({
-            expires: Date.now() + 3600000 // 1 час
+            expires: Date.now() + 3600000 // 1 С‡Р°СЃ
         }));
         showAdminPanel();
         updateUI();
-        alert('Вход выполнен!');
+        alert('Р’С…РѕРґ РІС‹РїРѕР»РЅРµРЅ!');
     } else {
-        alert('Неверный пароль!');
+        alert('РќРµРІРµСЂРЅС‹Р№ РїР°СЂРѕР»СЊ!');
     }
 }
 
-// Выход
+// Р’С‹С…РѕРґ
 function logout() {
     isAdmin = false;
     localStorage.removeItem('admin_auth');
     hideAdminPanel();
     updateUI();
-    alert('Выход выполнен!');
+    alert('Р’С‹С…РѕРґ РІС‹РїРѕР»РЅРµРЅ!');
 }
 
-// Показать админ-панель
+// РџРѕРєР°Р·Р°С‚СЊ Р°РґРјРёРЅ-РїР°РЅРµР»СЊ
 function showAdminPanel() {
     const panel = document.getElementById('adminPanel');
     if (panel) panel.style.display = 'block';
 
-    // Добавляем кнопки управления к карточкам
+    // Р”РѕР±Р°РІР»СЏРµРј РєРЅРѕРїРєРё СѓРїСЂР°РІР»РµРЅРёСЏ Рє РєР°СЂС‚РѕС‡РєР°Рј
     document.querySelectorAll('.subject-card').forEach(card => {
         const id = card.dataset.id;
 
-        // Создаем контейнер для кнопок
+        // РЎРѕР·РґР°РµРј РєРѕРЅС‚РµР№РЅРµСЂ РґР»СЏ РєРЅРѕРїРѕРє
         let btnContainer = card.querySelector('.admin-buttons');
         if (!btnContainer) {
             btnContainer = document.createElement('div');
             btnContainer.className = 'admin-buttons';
             btnContainer.innerHTML = `
                 <button onclick="editSubject(${id})" class="btn-edit">
-                    <i class="fas fa-edit"></i> Редактировать
+                    <i class="fas fa-edit"></i> Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ
                 </button>
                 <button onclick="deleteSubject(${id})" class="btn-delete">
-                    <i class="fas fa-trash"></i> Удалить
+                    <i class="fas fa-trash"></i> РЈРґР°Р»РёС‚СЊ
                 </button>
             `;
             card.querySelector('.subject-footer').before(btnContainer);
@@ -64,18 +64,18 @@ function showAdminPanel() {
     });
 }
 
-// Скрыть админ-панель
+// РЎРєСЂС‹С‚СЊ Р°РґРјРёРЅ-РїР°РЅРµР»СЊ
 function hideAdminPanel() {
     const panel = document.getElementById('adminPanel');
     if (panel) panel.style.display = 'none';
 
-    // Скрываем кнопки управления
+    // РЎРєСЂС‹РІР°РµРј РєРЅРѕРїРєРё СѓРїСЂР°РІР»РµРЅРёСЏ
     document.querySelectorAll('.admin-buttons').forEach(btn => {
         btn.style.display = 'none';
     });
 }
 
-// Обновить интерфейс
+// РћР±РЅРѕРІРёС‚СЊ РёРЅС‚РµСЂС„РµР№СЃ
 function updateUI() {
     const loginBtn = document.getElementById('adminLoginBtn');
     const logoutBtn = document.getElementById('adminLogoutBtn');
@@ -84,44 +84,44 @@ function updateUI() {
     if (logoutBtn) logoutBtn.style.display = isAdmin ? 'block' : 'none';
 }
 
-// Удалить предмет
+// РЈРґР°Р»РёС‚СЊ РїСЂРµРґРјРµС‚
 function deleteSubject(id) {
-    if (!confirm('Удалить этот предмет? Все файлы будут удалены.')) return;
+    if (!confirm('РЈРґР°Р»РёС‚СЊ СЌС‚РѕС‚ РїСЂРµРґРјРµС‚? Р’СЃРµ С„Р°Р№Р»С‹ Р±СѓРґСѓС‚ СѓРґР°Р»РµРЅС‹.')) return;
 
     if (window.SubjectData.deleteSubject(id)) {
-        alert('Предмет удален!');
+        alert('РџСЂРµРґРјРµС‚ СѓРґР°Р»РµРЅ!');
         window.location.reload();
     } else {
-        alert('Ошибка при удалении!');
+        alert('РћС€РёР±РєР° РїСЂРё СѓРґР°Р»РµРЅРёРё!');
     }
 }
 
-// Редактировать предмет
+// Р РµРґР°РєС‚РёСЂРѕРІР°С‚СЊ РїСЂРµРґРјРµС‚
 function editSubject(id) {
     const subject = window.SubjectData.getSubjectById(id);
     if (!subject) return;
 
-    const newName = prompt('Новое название предмета:', subject.name);
+    const newName = prompt('РќРѕРІРѕРµ РЅР°Р·РІР°РЅРёРµ РїСЂРµРґРјРµС‚Р°:', subject.name);
     if (!newName) return;
 
-    const newTeacher = prompt('Имя преподавателя:', subject.teacher);
+    const newTeacher = prompt('РРјСЏ РїСЂРµРїРѕРґР°РІР°С‚РµР»СЏ:', subject.teacher);
 
     if (window.SubjectData.updateSubject(id, {
         name: newName,
         teacher: newTeacher
     })) {
-        alert('Предмет обновлен!');
+        alert('РџСЂРµРґРјРµС‚ РѕР±РЅРѕРІР»РµРЅ!');
         window.location.reload();
     }
 }
 
-// Добавить новый предмет
+// Р”РѕР±Р°РІРёС‚СЊ РЅРѕРІС‹Р№ РїСЂРµРґРјРµС‚
 function addNewSubject() {
     const name = document.getElementById('subjectName').value;
     const teacher = document.getElementById('subjectTeacher').value;
 
     if (!name || !teacher) {
-        alert('Заполните все поля!');
+        alert('Р—Р°РїРѕР»РЅРёС‚Рµ РІСЃРµ РїРѕР»СЏ!');
         return;
     }
 
@@ -131,24 +131,24 @@ function addNewSubject() {
         files: []
     });
 
-    alert('Предмет добавлен!');
+    alert('РџСЂРµРґРјРµС‚ РґРѕР±Р°РІР»РµРЅ!');
     document.getElementById('subjectName').value = '';
     document.getElementById('subjectTeacher').value = '';
     window.location.reload();
 }
 
-// Инициализация
+// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
 document.addEventListener('DOMContentLoaded', () => {
     checkAuth();
 
-    // Обработчики кнопок
+    // РћР±СЂР°Р±РѕС‚С‡РёРєРё РєРЅРѕРїРѕРє
     const loginBtn = document.getElementById('adminLoginBtn');
     const logoutBtn = document.getElementById('adminLogoutBtn');
 
     if (loginBtn) loginBtn.addEventListener('click', login);
     if (logoutBtn) logoutBtn.addEventListener('click', logout);
 
-    // Кнопка добавления
+    // РљРЅРѕРїРєР° РґРѕР±Р°РІР»РµРЅРёСЏ
     const addBtn = document.getElementById('addSubjectBtn');
     if (addBtn) addBtn.addEventListener('click', addNewSubject);
 });

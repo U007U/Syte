@@ -1,4 +1,4 @@
-// Отображение карточек предметов
+﻿// РћС‚РѕР±СЂР°Р¶РµРЅРёРµ РєР°СЂС‚РѕС‡РµРє РїСЂРµРґРјРµС‚РѕРІ
 function renderSubjects() {
     const subjects = window.SubjectData.getSubjects();
     const container = document.getElementById('subjectsGrid');
@@ -9,8 +9,8 @@ function renderSubjects() {
         container.innerHTML = `
             <div class="no-subjects">
                 <i class="fas fa-book-open fa-3x"></i>
-                <h3>Пока нет предметов</h3>
-                <p>Администратор добавит задания скоро</p>
+                <h3>РџРѕРєР° РЅРµС‚ РїСЂРµРґРјРµС‚РѕРІ</h3>
+                <p>РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ РґРѕР±Р°РІРёС‚ Р·Р°РґР°РЅРёСЏ СЃРєРѕСЂРѕ</p>
             </div>
         `;
         return;
@@ -26,7 +26,7 @@ function renderSubjects() {
                         ${subject.teacher}
                     </p>
                 </div>
-                <span class="subject-badge">${subject.files ? subject.files.length : 0} файлов</span>
+                <span class="subject-badge">${subject.files ? subject.files.length : 0} С„Р°Р№Р»РѕРІ</span>
             </div>
             
             ${subject.files && subject.files.length > 0 ? `
@@ -50,20 +50,20 @@ function renderSubjects() {
                     `).join('')}
                 </div>
             ` : `
-                <p class="no-files">Файлы пока не добавлены</p>
+                <p class="no-files">Р¤Р°Р№Р»С‹ РїРѕРєР° РЅРµ РґРѕР±Р°РІР»РµРЅС‹</p>
             `}
             
             <div class="subject-footer">
                 <small class="text-muted">
                     <i class="far fa-clock"></i>
-                    Обновлено: ${formatDate(subject.createdAt)}
+                    РћР±РЅРѕРІР»РµРЅРѕ: ${formatDate(subject.createdAt)}
                 </small>
             </div>
         </div>
     `).join('');
 }
 
-// Иконка в зависимости от типа файла
+// РРєРѕРЅРєР° РІ Р·Р°РІРёСЃРёРјРѕСЃС‚Рё РѕС‚ С‚РёРїР° С„Р°Р№Р»Р°
 function getFileIcon(filename) {
     const ext = filename.split('.').pop().toLowerCase();
     const icons = {
@@ -81,7 +81,7 @@ function getFileIcon(filename) {
     return `<i class="${icons[ext] || 'fas fa-file'}"></i>`;
 }
 
-// Форматирование даты
+// Р¤РѕСЂРјР°С‚РёСЂРѕРІР°РЅРёРµ РґР°С‚С‹
 function formatDate(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString('ru-RU', {
@@ -91,11 +91,11 @@ function formatDate(dateString) {
     });
 }
 
-// Инициализация при загрузке страницы
+// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РїСЂРё Р·Р°РіСЂСѓР·РєРµ СЃС‚СЂР°РЅРёС†С‹
 document.addEventListener('DOMContentLoaded', () => {
     renderSubjects();
 
-    // Обновляем при изменениях в данных
+    // РћР±РЅРѕРІР»СЏРµРј РїСЂРё РёР·РјРµРЅРµРЅРёСЏС… РІ РґР°РЅРЅС‹С…
     window.addEventListener('storage', (e) => {
         if (e.key === 'subjects_data') {
             renderSubjects();

@@ -51,6 +51,70 @@
     </style>
 </head>
 <body>
+<script>
+// Глобальные переменные с сохранением в localStorage
+let isAdminMode = localStorage.getItem('admin_mode') === 'true';
+
+// При загрузке восстанавливаем состояние
+if (isAdminMode) {
+    document.getElementById('adminPanel')?.classList.remove('hidden');
+    document.getElementById('adminToggle').innerHTML = '<i class="fas fa-user-cog"></i>';
+    document.getElementById('adminToggle').classList.add('active');
+}
+
+// В функциях toggleAdmin и logoutAdmin обновляем localStorage
+window.toggleAdmin = function() {
+    if (isAdminMode) {
+        isAdminMode = false;
+        localStorage.setItem('admin_mode', 'false');
+        document.getElementById('adminPanel').classList.add('hidden');
+        document.getElementById('adminToggle').innerHTML = '<i class="fas fa-user-shield"></i>';
+        document.getElementById('adminToggle').classList.remove('active');
+        
+        // Скрываем кнопки админа
+        document.querySelectorAll('.admin-buttons').forEach(btn => {
+            btn.style.display = 'none';
+        });
+        
+        alert('Вы вышли из режима администратора');
+    } else {
+        const password = prompt('Введите пароль администратора:');
+        // Проверяем пароль напрямую
+        if (password === 'admin123') {
+            isAdminMode = true;
+            localStorage.setItem('admin_mode', 'true');
+            document.getElementById('adminPanel').classList.remove('hidden');
+            document.getElementById('adminToggle').innerHTML = '<i class="fas fa-user-cog"></i>';
+            document.getElementById('adminToggle').classList.add('active');
+            
+            // Показываем кнопки админа
+            document.querySelectorAll('.admin-buttons').forEach(btn => {
+                btn.style.display = 'block';
+            });
+            
+            alert('Режим администратора активирован!');
+        } else if (password) {
+            alert('Неверный пароль!');
+        }
+    }
+};
+
+// Функция выхода
+window.logoutAdmin = function() {
+    isAdminMode = false;
+    localStorage.setItem('admin_mode', 'false');
+    document.getElementById('adminPanel').classList.add('hidden');
+    document.getElementById('adminToggle').innerHTML = '<i class="fas fa-user-shield"></i>';
+    document.getElementById('adminToggle').classList.remove('active');
+    
+    // Скрываем кнопки админа
+    document.querySelectorAll('.admin-buttons').forEach(btn => {
+        btn.style.display = 'none';
+    });
+    
+    alert('Вы вышли из режима администратора');
+};
+</script>
     <!-- Кнопка админа -->
     <button id="adminToggle" class="admin-toggle" title="Режим администратора" onclick="toggleAdmin()">
         <i class="fas fa-user-shield"></i>
@@ -408,6 +472,7 @@
     <script src="assets/js/data.js"></script>
 </body>
 </html>
+
 
 
 

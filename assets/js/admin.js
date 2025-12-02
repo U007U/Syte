@@ -60,3 +60,4 @@ function editSubject(id) {
 window.addNewSubject = addNewSubject;
 window.deleteSubject = deleteSubject;
 window.editSubject = editSubject;
+

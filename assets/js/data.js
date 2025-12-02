@@ -1,44 +1,43 @@
-﻿// РҐСЂР°РЅРµРЅРёРµ РґР°РЅРЅС‹С… РІ localStorage
-const STORAGE_KEY = 'subjects_data';
+﻿const STORAGE_KEY = 'subjects_data';
 const ADMIN_PASSWORD = 'admin123';
 
-// РќР°С‡Р°Р»СЊРЅС‹Рµ РґР°РЅРЅС‹Рµ
+// Начальные данные
 let subjects = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [
     {
         id: 1,
-        name: "РќР°Р»РѕРіРё Рё РЅР°Р»РѕРіРѕРѕР±Р»РѕР¶РµРЅРёРµ",
-        teacher: "РРІР°РЅРѕРІ РРІР°РЅ РРІР°РЅРѕРІРёС‡",
+        name: "Налоги и налогообложение",
+        teacher: "Иванов Иван Иванович",
         files: [
             {
-                name: "С‚РµРјС‹_СЂРµС„РµСЂР°С‚РѕРІ.docx",
-                desc: "РЎРїРёСЃРѕРє С‚РµРј РґР»СЏ СЂРµС„РµСЂР°С‚РѕРІ. Р’С‹Р±РµСЂРёС‚Рµ СЃРІРѕСЋ С‚РµРјСѓ.",
-                filename: "С‚РµРјС‹_СЂРµС„РµСЂР°С‚РѕРІ.docx"
+                name: "темы_рефератов.docx",
+                desc: "Список тем для рефератов. Выберите свою тему.",
+                filename: "темы_рефератов.docx"
             },
             {
-                name: "Р·Р°РґР°РЅРёРµ_СЌСЃСЃРµ.pdf",
-                desc: "РўСЂРµР±РѕРІР°РЅРёСЏ Рё РјРµС‚РѕРґРёС‡РµСЃРєРёРµ СѓРєР°Р·Р°РЅРёСЏ РґР»СЏ РЅР°РїРёСЃР°РЅРёСЏ СЌСЃСЃРµ",
-                filename: "Р·Р°РґР°РЅРёРµ_СЌСЃСЃРµ.pdf"
+                name: "задание_эссе.pdf",
+                desc: "Требования и методические указания для написания эссе",
+                filename: "задание_эссе.pdf"
             }
         ]
     }
 ];
 
-// РЎРѕС…СЂР°РЅРёС‚СЊ РґР°РЅРЅС‹Рµ
+// Сохранить данные
 function saveData() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(subjects));
 }
 
-// РџРѕР»СѓС‡РёС‚СЊ РІСЃРµ РїСЂРµРґРјРµС‚С‹
+// Получить все предметы
 function getSubjects() {
     return subjects;
 }
 
-// РќР°Р№С‚Рё РїСЂРµРґРјРµС‚ РїРѕ ID
+// Найти предмет по ID
 function getSubjectById(id) {
     return subjects.find(subject => subject.id === id);
 }
 
-// Р”РѕР±Р°РІРёС‚СЊ РїСЂРµРґРјРµС‚
+// Добавить предмет
 function addSubject(subject) {
     const newSubject = {
         id: Date.now(),
@@ -50,7 +49,7 @@ function addSubject(subject) {
     return newSubject;
 }
 
-// РћР±РЅРѕРІРёС‚СЊ РїСЂРµРґРјРµС‚
+// Обновить предмет
 function updateSubject(id, updates) {
     const index = subjects.findIndex(s => s.id === id);
     if (index !== -1) {
@@ -61,7 +60,7 @@ function updateSubject(id, updates) {
     return false;
 }
 
-// РЈРґР°Р»РёС‚СЊ РїСЂРµРґРјРµС‚
+// Удалить предмет
 function deleteSubject(id) {
     const index = subjects.findIndex(s => s.id === id);
     if (index !== -1) {
@@ -72,7 +71,7 @@ function deleteSubject(id) {
     return false;
 }
 
-// Р”РѕР±Р°РІРёС‚СЊ С„Р°Р№Р» Рє РїСЂРµРґРјРµС‚Сѓ
+// Добавить файл к предмету
 function addFileToSubject(subjectId, file) {
     const subject = getSubjectById(subjectId);
     if (subject) {
@@ -89,7 +88,7 @@ function addFileToSubject(subjectId, file) {
     return null;
 }
 
-// РЈРґР°Р»РёС‚СЊ С„Р°Р№Р»
+// Удалить файл
 function removeFileFromSubject(subjectId, fileId) {
     const subject = getSubjectById(subjectId);
     if (subject && subject.files) {
@@ -103,12 +102,12 @@ function removeFileFromSubject(subjectId, fileId) {
     return false;
 }
 
-// РџСЂРѕРІРµСЂРёС‚СЊ РїР°СЂРѕР»СЊ Р°РґРјРёРЅР°
+// Проверить пароль админа
 function checkAdminPassword(password) {
     return password === ADMIN_PASSWORD;
 }
 
-// Р­РєСЃРїРѕСЂС‚ С„СѓРЅРєС†РёР№
+// Экспорт функций
 window.SubjectData = {
     getSubjects,
     getSubjectById,

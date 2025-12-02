@@ -177,7 +177,7 @@
         let isAdminMode = false;
 
         // Динамическое отображение предметов
-        function renderSubjects() {
+        window.renderSubjects = function() {
             const subjects = window.SubjectData ? window.SubjectData.getSubjects() : [];
             const container = document.getElementById('subjectsGrid');
             
@@ -409,5 +409,6 @@
     <script src="assets/js/data.js"></script><script src="assets/js/admin.js"></script>
 </body>
 </html>
+
 
 

@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -177,7 +178,7 @@
 
         // Динамическое отображение предметов
         window.renderSubjects = function() {
-            const subjects = JSON.parse(localStorage.getItem('subjects_data') || '[]');
+            const subjects = window.SubjectData ? window.SubjectData.getSubjects() : [];
             const container = document.getElementById('subjectsGrid');
             
             if (!container) return;
@@ -297,7 +298,7 @@
             }
             
             const password = prompt('Введите пароль администратора:');
-            if (password === 'admin123') {
+            if (window.SubjectData && window.SubjectData.checkAdminPassword(password)) {
                 isAdminMode = true;
                 document.getElementById('adminPanel').classList.remove('hidden');
                 document.getElementById('adminToggle').innerHTML = '<i class="fas fa-user-cog"></i>';
@@ -337,44 +338,37 @@
                 return;
             }
             
-            // Всегда работаем напрямую с localStorage
-            const subjects = JSON.parse(localStorage.getItem('subjects_data') || '[]');
-            subjects.push({
-                id: Date.now(),
-                name: name,
-                teacher: teacher,
-                files: [],
-                createdAt: new Date().toISOString()
-            });
-            localStorage.setItem('subjects_data', JSON.stringify(subjects));
-            
-            alert(`Предмет "${name}" добавлен!`);
-            document.getElementById('subjectName').value = '';
-            document.getElementById('teacherName').value = '';
-            
-            // Обновляем отображение
-            renderSubjects();
+            if (window.SubjectData) {
+                window.SubjectData.addSubject({
+                    name: name,
+                    teacher: teacher,
+                    files: []
+                });
+                
+                alert(`Предмет "${name}" добавлен!`);
+                document.getElementById('subjectName').value = '';
+                document.getElementById('teacherName').value = '';
+                
+                // Обновляем отображение
+                renderSubjects();
+            } else {
+                alert('Ошибка: данные не загружены');
+            }
         }
         
         function deleteSubject(id) {
             if (!confirm('Удалить этот предмет? Все файлы будут удалены.')) return;
             
-            // Работаем напрямую с localStorage
-            const subjects = JSON.parse(localStorage.getItem('subjects_data') || '[]');
-            // Преобразуем id к числу для сравнения
-            const numId = Number(id);
-            const filtered = subjects.filter(subject => subject.id !== numId);
-            localStorage.setItem('subjects_data', JSON.stringify(filtered));
-            
-            alert('Предмет удален!');
-            renderSubjects();
+            if (window.SubjectData && window.SubjectData.deleteSubject(id)) {
+                alert('Предмет удален!');
+                renderSubjects();
+            } else {
+                alert('Ошибка при удалении!');
+            }
         }
         
         function editSubject(id) {
-            // Работаем напрямую с localStorage
-            const subjects = JSON.parse(localStorage.getItem('subjects_data') || '[]');
-            const subject = subjects.find(s => s.id === Number(id));
-            
+            const subject = window.SubjectData ? window.SubjectData.getSubjectById(id) : null;
             if (!subject) return;
             
             const newName = prompt('Новое название предмета:', subject.name);
@@ -382,14 +376,13 @@
             
             const newTeacher = prompt('Имя преподавателя:', subject.teacher);
             
-            // Обновляем предмет
-            const updated = subjects.map(s => 
-                s.id === Number(id) ? {...s, name: newName, teacher: newTeacher} : s
-            );
-            
-            localStorage.setItem('subjects_data', JSON.stringify(updated));
-            alert('Предмет обновлен!');
-            renderSubjects();
+            if (window.SubjectData.updateSubject(id, {
+                name: newName,
+                teacher: newTeacher
+            })) {
+                alert('Предмет обновлен!');
+                renderSubjects();
+            }
         }
         
         // Показать дату обновления
@@ -398,15 +391,17 @@
             
         // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
-            // Загружаем данные
-            renderSubjects();
-            
-            // Слушаем изменения в localStorage
-            window.addEventListener('storage', (e) => {
-                if (e.key === 'subjects_data') {
-                    renderSubjects();
-                }
-            });
+            // Ждем загрузки данных
+            setTimeout(() => {
+                renderSubjects();
+                
+                // Слушаем изменения в localStorage
+                window.addEventListener('storage', (e) => {
+                    if (e.key === 'subjects_data') {
+                        renderSubjects();
+                    }
+                });
+            }, 100);
         });
     </script>
     
@@ -414,3 +409,8 @@
     <script src="assets/js/data.js"></script>
 </body>
 </html>
+
+
+
+
+

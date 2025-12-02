@@ -1,5 +1,4 @@
-﻿
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -51,70 +50,6 @@
     </style>
 </head>
 <body>
-<script>
-// Глобальные переменные с сохранением в localStorage
-let isAdminMode = localStorage.getItem('admin_mode') === 'true';
-
-// При загрузке восстанавливаем состояние
-if (isAdminMode) {
-    document.getElementById('adminPanel')?.classList.remove('hidden');
-    document.getElementById('adminToggle').innerHTML = '<i class="fas fa-user-cog"></i>';
-    document.getElementById('adminToggle').classList.add('active');
-}
-
-// В функциях toggleAdmin и logoutAdmin обновляем localStorage
-window.toggleAdmin = function() {
-    if (isAdminMode) {
-        isAdminMode = false;
-        localStorage.setItem('admin_mode', 'false');
-        document.getElementById('adminPanel').classList.add('hidden');
-        document.getElementById('adminToggle').innerHTML = '<i class="fas fa-user-shield"></i>';
-        document.getElementById('adminToggle').classList.remove('active');
-        
-        // Скрываем кнопки админа
-        document.querySelectorAll('.admin-buttons').forEach(btn => {
-            btn.style.display = 'none';
-        });
-        
-        alert('Вы вышли из режима администратора');
-    } else {
-        const password = prompt('Введите пароль администратора:');
-        // Проверяем пароль напрямую
-        if (password === 'admin123') {
-            isAdminMode = true;
-            localStorage.setItem('admin_mode', 'true');
-            document.getElementById('adminPanel').classList.remove('hidden');
-            document.getElementById('adminToggle').innerHTML = '<i class="fas fa-user-cog"></i>';
-            document.getElementById('adminToggle').classList.add('active');
-            
-            // Показываем кнопки админа
-            document.querySelectorAll('.admin-buttons').forEach(btn => {
-                btn.style.display = 'block';
-            });
-            
-            alert('Режим администратора активирован!');
-        } else if (password) {
-            alert('Неверный пароль!');
-        }
-    }
-};
-
-// Функция выхода
-window.logoutAdmin = function() {
-    isAdminMode = false;
-    localStorage.setItem('admin_mode', 'false');
-    document.getElementById('adminPanel').classList.add('hidden');
-    document.getElementById('adminToggle').innerHTML = '<i class="fas fa-user-shield"></i>';
-    document.getElementById('adminToggle').classList.remove('active');
-    
-    // Скрываем кнопки админа
-    document.querySelectorAll('.admin-buttons').forEach(btn => {
-        btn.style.display = 'none';
-    });
-    
-    alert('Вы вышли из режима администратора');
-};
-</script>
     <!-- Кнопка админа -->
     <button id="adminToggle" class="admin-toggle" title="Режим администратора" onclick="toggleAdmin()">
         <i class="fas fa-user-shield"></i>
@@ -221,6 +156,7 @@ window.logoutAdmin = function() {
                 <div class="footer-section">
                     <h4><i class="fas fa-question-circle"></i> Помощь</h4>
                     <p>Telegram: @ваш_логин</p>
+                    <p>Пароль админа: admin123</p>
                 </div>
                 <div class="footer-section">
                     <h4><i class="fas fa-sync-alt"></i> Обновления</h4>
@@ -241,7 +177,7 @@ window.logoutAdmin = function() {
 
         // Динамическое отображение предметов
         window.renderSubjects = function() {
-            const subjects = window.SubjectData ? window.SubjectData.getSubjects() : [];
+            const subjects = JSON.parse(localStorage.getItem('subjects_data') || '[]');
             const container = document.getElementById('subjectsGrid');
             
             if (!container) return;
@@ -361,7 +297,7 @@ window.logoutAdmin = function() {
             }
             
             const password = prompt('Введите пароль администратора:');
-            if (window.SubjectData && window.SubjectData.checkAdminPassword(password)) {
+            if (password === 'admin123') {
                 isAdminMode = true;
                 document.getElementById('adminPanel').classList.remove('hidden');
                 document.getElementById('adminToggle').innerHTML = '<i class="fas fa-user-cog"></i>';
@@ -401,37 +337,44 @@ window.logoutAdmin = function() {
                 return;
             }
             
-            if (window.SubjectData) {
-                window.SubjectData.addSubject({
-                    name: name,
-                    teacher: teacher,
-                    files: []
-                });
-                
-                alert(`Предмет "${name}" добавлен!`);
-                document.getElementById('subjectName').value = '';
-                document.getElementById('teacherName').value = '';
-                
-                // Обновляем отображение
-                renderSubjects();
-            } else {
-                alert('Ошибка: данные не загружены');
-            }
+            // Всегда работаем напрямую с localStorage
+            const subjects = JSON.parse(localStorage.getItem('subjects_data') || '[]');
+            subjects.push({
+                id: Date.now(),
+                name: name,
+                teacher: teacher,
+                files: [],
+                createdAt: new Date().toISOString()
+            });
+            localStorage.setItem('subjects_data', JSON.stringify(subjects));
+            
+            alert(`Предмет "${name}" добавлен!`);
+            document.getElementById('subjectName').value = '';
+            document.getElementById('teacherName').value = '';
+            
+            // Обновляем отображение
+            renderSubjects();
         }
         
         function deleteSubject(id) {
             if (!confirm('Удалить этот предмет? Все файлы будут удалены.')) return;
             
-            if (window.SubjectData && window.SubjectData.deleteSubject(id)) {
-                alert('Предмет удален!');
-                renderSubjects();
-            } else {
-                alert('Ошибка при удалении!');
-            }
+            // Работаем напрямую с localStorage
+            const subjects = JSON.parse(localStorage.getItem('subjects_data') || '[]');
+            // Преобразуем id к числу для сравнения
+            const numId = Number(id);
+            const filtered = subjects.filter(subject => subject.id !== numId);
+            localStorage.setItem('subjects_data', JSON.stringify(filtered));
+            
+            alert('Предмет удален!');
+            renderSubjects();
         }
         
         function editSubject(id) {
-            const subject = window.SubjectData ? window.SubjectData.getSubjectById(id) : null;
+            // Работаем напрямую с localStorage
+            const subjects = JSON.parse(localStorage.getItem('subjects_data') || '[]');
+            const subject = subjects.find(s => s.id === Number(id));
+            
             if (!subject) return;
             
             const newName = prompt('Новое название предмета:', subject.name);
@@ -439,13 +382,14 @@ window.logoutAdmin = function() {
             
             const newTeacher = prompt('Имя преподавателя:', subject.teacher);
             
-            if (window.SubjectData.updateSubject(id, {
-                name: newName,
-                teacher: newTeacher
-            })) {
-                alert('Предмет обновлен!');
-                renderSubjects();
-            }
+            // Обновляем предмет
+            const updated = subjects.map(s => 
+                s.id === Number(id) ? {...s, name: newName, teacher: newTeacher} : s
+            );
+            
+            localStorage.setItem('subjects_data', JSON.stringify(updated));
+            alert('Предмет обновлен!');
+            renderSubjects();
         }
         
         // Показать дату обновления
@@ -454,17 +398,15 @@ window.logoutAdmin = function() {
             
         // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', function() {
-            // Ждем загрузки данных
-            setTimeout(() => {
-                renderSubjects();
-                
-                // Слушаем изменения в localStorage
-                window.addEventListener('storage', (e) => {
-                    if (e.key === 'subjects_data') {
-                        renderSubjects();
-                    }
-                });
-            }, 100);
+            // Загружаем данные
+            renderSubjects();
+            
+            // Слушаем изменения в localStorage
+            window.addEventListener('storage', (e) => {
+                if (e.key === 'subjects_data') {
+                    renderSubjects();
+                }
+            });
         });
     </script>
     
@@ -472,14 +414,3 @@ window.logoutAdmin = function() {
     <script src="assets/js/data.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-

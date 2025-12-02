@@ -19,8 +19,12 @@ function addNewSubject() {
         document.getElementById('subjectName').value = '';
         document.getElementById('teacherName').value = '';
         
-        // Перезагружаем страницу чтобы обновились карточки
-        setTimeout(() => location.reload(), 500);
+        // Обновляем отображение без перезагрузки
+        if (window.renderSubjects) {
+            window.renderSubjects();
+        } else {
+            location.reload();
+        }
     } else {
         alert('Ошибка: данные не загружены!');
         console.error('SubjectData не найден:', window.SubjectData);
@@ -32,7 +36,12 @@ function deleteSubject(id) {
     
     if (window.SubjectData && window.SubjectData.deleteSubject(id)) {
         alert('Предмет удален!');
-        location.reload();
+        // Обновляем отображение без перезагрузки
+        if (window.renderSubjects) {
+            window.renderSubjects();
+        } else {
+            location.reload();
+        }
     } else {
         alert('Ошибка при удалении!');
     }
@@ -52,12 +61,21 @@ function editSubject(id) {
         teacher: newTeacher
     })) {
         alert('Предмет обновлен!');
-        location.reload();
+        // Обновляем отображение без перезагрузки
+        if (window.renderSubjects) {
+            window.renderSubjects();
+        } else {
+            location.reload();
+        }
     }
 }
 
-// Глобальные функции для кнопок
+// Делаем функции глобальными
 window.addNewSubject = addNewSubject;
 window.deleteSubject = deleteSubject;
 window.editSubject = editSubject;
 
+// Экспортируем renderSubjects если есть
+if (typeof renderSubjects !== 'undefined') {
+    window.renderSubjects = renderSubjects;
+}

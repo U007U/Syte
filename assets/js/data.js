@@ -109,6 +109,7 @@ window.SubjectData = (function() {
             teacher: "Сизяков И.А.",
             files: [
                 {
+                    filename: "", 
                     name: "Самоподготовка",
                     desc: "1.Что такое Инкотермс(Incoterms). 2.Виды маршрутов перевозки",
                     deadline: ""

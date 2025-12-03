@@ -57,10 +57,7 @@
     </style>
 </head>
 <body>
-    <!-- Кнопка админа -->
-    <button id="adminToggle" class="admin-toggle" title="Режим администратора" onclick="toggleAdmin()">
-        <i class="fas fa-user-shield"></i>
-    </button>
+    
 
     <!-- Шапка -->
     <header class="header">
@@ -111,25 +108,7 @@
             </ol>
         </div>
 
-        <!-- Админ-панель (скрыта по умолчанию) -->
-        <div id="adminPanel" class="admin-panel hidden">
-            <div class="admin-header">
-                <h3><i class="fas fa-cogs"></i> Панель администратора</h3>
-                <button onclick="logoutAdmin()" class="btn-logout">
-                    <i class="fas fa-sign-out-alt"></i> Выйти
-                </button>
-            </div>
-            
-            <div class="admin-section">
-                <h4><i class="fas fa-plus-circle"></i> Добавить новый предмет</h4>
-                <div class="admin-form">
-                    <input type="text" id="subjectName" placeholder="Название предмета" class="form-input">
-                    <input type="text" id="teacherName" placeholder="Имя преподавателя" class="form-input">
-                    <button onclick="addNewSubject()" class="btn-primary">
-                        <i class="fas fa-plus"></i> Добавить предмет
-                    </button>
-                </div>
-            </div>
+        
             
             <div class="admin-section">
                 <h4><i class="fas fa-upload"></i> Инструкция по загрузке файлов</h4>
@@ -180,7 +159,7 @@
     <script>
         // Глобальные переменные
         // Сохраняем состояние админки в localStorage
-let isAdminMode = localStorage.getItem("isAdminMode") === "true";
+
 
         // Динамическое отображение предметов
         window.renderSubjects = function() {
@@ -415,6 +394,9 @@ let isAdminMode = localStorage.getItem("isAdminMode") === "true";
     <script src="assets/js/data.js"></script>
 </body>
 </html>
+
+
+
 
 
 

@@ -107,9 +107,9 @@ window.SubjectData = (function() {
             id: 4,
             name: "МДК 03.01 Транспортная логистика",
             teacher: "Сизяков И.А.",
-            files: [
+            files: [],
+            tasks: [
                 {
-                    filename: "", 
                     name: "Самоподготовка",
                     desc: "1.Что такое Инкотермс(Incoterms). 2.Виды маршрутов перевозки",
                     deadline: ""

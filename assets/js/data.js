@@ -19,6 +19,30 @@ let subjects = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [
                 filename: "задание_эссе.pdf"
             }
         ]
+    },
+    {
+        id: 2,
+        name: "Математика",
+        teacher: "Петрова Анна Сергеевна",
+        files: []
+    },
+    {
+        id: 3,
+        name: "Физика",
+        teacher: "Сидоров Алексей Владимирович",
+        files: []
+    },
+    {
+        id: 4,
+        name: "Информатика",
+        teacher: "Кузнецова Марина Игоревна",
+        files: []
+    },
+    {
+        id: 5,
+        name: "История",
+        teacher: "Николаев Дмитрий Петрович",
+        files: []
     }
 ];
 

@@ -115,7 +115,7 @@ window.SubjectData = (function() {
                 }
             ],
             createdAt: "2025-12-03"
-        },
+        }
         
         // Добавьте новый предмет здесь:
         // {

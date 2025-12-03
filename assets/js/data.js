@@ -1,134 +1,67 @@
-﻿const STORAGE_KEY = 'subjects_data';
+﻿// assets/js/data.js
+// ВСЕ ДАННЫЕ САЙТА ХРАНЯТСЯ ЗДЕСЬ
+// Обновите этот файл на GitHub для изменения контента сайта
 
-// Начальные данные
-let subjects = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [
-    {
-        id: 1,
-        name: "Налоги и налогообложение",
-        teacher: "Иванов Иван Иванович",
-        files: [
-            {
-                name: "Темы рефератов и задания по эссе",
-                desc: "Все материалы по налогам в одном файле",
-                filename: "NALOGI_TEMY_REFERATOV_ESSE.docx"
-            }
-        ]
-    },
-    {
-        id: 2,
-        name: "Математика",
-        teacher: "Петрова Анна Сергеевна",
-        files: []
-    },
-    {
-        id: 3,
-        name: "Физика",
-        teacher: "Сидоров Алексей Владимирович",
-        files: []
-    },
-    {
-        id: 4,
-        name: "Информатика",
-        teacher: "Кузнецова Марина Игоревна",
-        files: []
-    },
-    {
-        id: 5,
-        name: "История",
-        teacher: "Николаев Дмитрий Петрович",
-        files: []
-    }
-];
-
-// Сохранить данные
-function saveData() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(subjects));
-}
-
-// Получить все предметы
-function getSubjects() {
-    return subjects;
-}
-
-// Найти предмет по ID
-function getSubjectById(id) {
-    return subjects.find(subject => subject.id === id);
-}
-
-// Добавить предмет
-function addSubject(subject) {
-    const newSubject = {
-        id: Date.now(),
-        ...subject,
-        createdAt: new Date().toISOString()
-    };
-    subjects.push(newSubject);
-    saveData();
-    return newSubject;
-}
-
-// Обновить предмет
-function updateSubject(id, updates) {
-    const index = subjects.findIndex(s => s.id === id);
-    if (index !== -1) {
-        subjects[index] = { ...subjects[index], ...updates };
-        saveData();
-        return true;
-    }
-    return false;
-}
-
-// Удалить предмет
-function deleteSubject(id) {
-    const index = subjects.findIndex(s => s.id === id);
-    if (index !== -1) {
-        subjects.splice(index, 1);
-        saveData();
-        return true;
-    }
-    return false;
-}
-
-// Добавить файл к предмету
-function addFileToSubject(subjectId, file) {
-    const subject = getSubjectById(subjectId);
-    if (subject) {
-        if (!subject.files) subject.files = [];
-        const newFile = {
-            id: Date.now(),
-            ...file,
-            addedAt: new Date().toISOString()
-        };
-        subject.files.push(newFile);
-        saveData();
-        return newFile;
-    }
-    return null;
-}
-
-// Удалить файл
-function removeFileFromSubject(subjectId, fileId) {
-    const subject = getSubjectById(subjectId);
-    if (subject && subject.files) {
-        const index = subject.files.findIndex(f => f.id === fileId);
-        if (index !== -1) {
-            subject.files.splice(index, 1);
-            saveData();
-            return true;
+window.SubjectData = (function() {
+    'use strict';
+    
+    // Массив предметов (добавляйте новые предметы здесь)
+    const subjects = [
+        {
+            id: 1,
+            name: "МДК 03.02 Логистика сервисного обслуживания",
+            teacher: "Володин С.П.",
+            files: [
+                {
+                    filename: "photo_2025-12-03_12-52-45.jpg",
+                    name: "Темы рефератов по логистике",
+                    desc: "Список из 20 тем для написания реферата",
+                    deadline: "до декабря 2025 г."
+                }
+                // Добавьте другие файлы для этого предмета:
+                // {
+                //     filename: "другой-файл.pdf",
+                //     name: "Название файла",
+                //     desc: "Описание",
+                //     deadline: "срок сдачи"
+                // }
+            ],
+            createdAt: "2025-12-03"
         }
-    }
-    return false;
-}
+        // Добавьте новый предмет здесь:
+        // {
+        //     id: 2,
+        //     name: "Название предмета",
+        //     teacher: "ФИО преподавателя",
+        //     files: [...],
+        //     createdAt: "дата"
+        // }
+    ];
+    
+    // Публичные методы
+    return {
+        // Получить все предметы
+        getSubjects: function() {
+            return subjects;
+        },
+        
+        // Получить предмет по ID
+        getSubjectById: function(id) {
+            return subjects.find(subject => subject.id === id);
+        },
+        
+        // Получить количество предметов
+        getSubjectsCount: function() {
+            return subjects.length;
+        },
+        
+        // Получить общее количество файлов
+        getTotalFilesCount: function() {
+            return subjects.reduce((total, subject) => {
+                return total + (subject.files ? subject.files.length : 0);
+            }, 0);
+        }
+    };
+})();
 
-// Экспорт функций
-window.SubjectData = {
-    getSubjects,
-    getSubjectById,
-    addSubject,
-    updateSubject,
-    deleteSubject,
-    addFileToSubject,
-    removeFileFromSubject,
-    saveData
-};
-
+console.log("SubjectData загружен. Предметов:", window.SubjectData.getSubjectsCount());

@@ -1,4 +1,4 @@
-﻿/* РћСЃРЅРѕРІРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ */
+﻿/* Основные переменные */
 :root {
     --primary: #4f46e5;
     --primary-dark: #4338ca;
@@ -16,7 +16,7 @@
     --transition: all 0.3s ease;
 }
 
-/* РЎР±СЂРѕСЃ СЃС‚РёР»РµР№ */
+/* Сброс стилей */
 * {
     margin: 0;
     padding: 0;
@@ -38,7 +38,7 @@ body {
     padding: 0 20px;
 }
 
-/* РЁР°РїРєР° */
+/* Шапка */
 .header {
     background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
     color: white;
@@ -88,7 +88,7 @@ body {
     z-index: 1;
 }
 
-/* РЎС‚Р°С‚РёСЃС‚РёРєР° */
+/* Статистика */
 .stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -128,7 +128,7 @@ body {
     font-size: 0.95rem;
 }
 
-/* РЎРµС‚РєР° РїСЂРµРґРјРµС‚РѕРІ */
+/* Сетка предметов */
 .subjects-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -195,7 +195,7 @@ body {
     font-weight: 500;
 }
 
-/* Р¤Р°Р№Р»С‹ */
+/* Файлы */
 .file-list {
     margin: 1.5rem 0;
 }
@@ -226,6 +226,7 @@ body {
 
 .file-info {
     flex: 1;
+    min-width: 0; /* Важно для корректного переноса текста */
 }
 
 .file-name {
@@ -234,6 +235,8 @@ body {
     margin-bottom: 0.3rem;
     display: block;
     font-size: 1.05rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .file-desc {
@@ -255,6 +258,7 @@ body {
     transition: var(--transition);
     font-weight: 500;
     text-decoration: none;
+    flex-shrink: 0; /* Предотвращает сжатие кнопки */
 }
 
 .download-btn:hover {
@@ -288,7 +292,7 @@ body {
     gap: 0.5rem;
 }
 
-/* РРЅС„РѕСЂРјР°С†РёРѕРЅРЅР°СЏ РєР°СЂС‚РѕС‡РєР° */
+/* Информационная карточка */
 .info-card {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -315,7 +319,7 @@ body {
     padding-left: 0.5rem;
 }
 
-/* РђРґРјРёРЅ-РїР°РЅРµР»СЊ */
+/* Админ-панель */
 .admin-panel {
     background: var(--card-bg);
     border-radius: var(--radius);
@@ -478,7 +482,7 @@ body {
     color: var(--danger);
 }
 
-/* РџРѕРґРІР°Р» */
+/* Подвал */
 .footer {
     background: var(--dark);
     color: white;
@@ -525,7 +529,7 @@ body {
     text-decoration: underline;
 }
 
-/* РљРЅРѕРїРєР° Р°РґРјРёРЅР° */
+/* Кнопка админа */
 .admin-toggle {
     position: fixed;
     bottom: 30px;
@@ -557,7 +561,7 @@ body {
     transform: rotate(360deg);
 }
 
-/* РђРґР°РїС‚РёРІРЅРѕСЃС‚СЊ */
+/* Адаптивность */
 @media (max-width: 768px) {
     .container {
         padding: 0 15px;
@@ -602,6 +606,17 @@ body {
     .form-input {
         min-width: 100%;
     }
+    
+    /* Исправление для кнопок скачивания на планшетах */
+    .file-item {
+        flex-wrap: wrap;
+    }
+    
+    .download-btn {
+        margin-top: 0.5rem;
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 @media (max-width: 480px) {
@@ -624,24 +639,49 @@ body {
         font-size: 1.5rem;
     }
     
+    /* Исправление для кнопок скачивания на мобильных */
     .file-item {
         flex-direction: column;
         text-align: center;
+        align-items: stretch;
+        padding: 1.25rem;
     }
     
     .file-icon {
         margin-right: 0;
-        margin-bottom: 0.75rem;
+        margin-bottom: 1rem;
+        min-width: auto;
+        font-size: 2rem;
+    }
+    
+    .file-info {
+        margin-bottom: 1rem;
+        width: 100%;
     }
     
     .download-btn {
-        margin-top: 0.75rem;
         width: 100%;
         justify-content: center;
+        margin-top: 0.75rem;
+        padding: 0.85rem 1.5rem;
+        font-size: 1.05rem;
+    }
+    
+    .file-name {
+        font-size: 1.1rem;
+    }
+    
+    .file-desc {
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+    
+    .subject-card {
+        padding: 1.25rem;
     }
 }
 
-/* РђРЅРёРјР°С†РёРё */
+/* Анимации */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -661,7 +701,7 @@ body {
     animation: fadeIn 0.6s ease-out 0.2s both;
 }
 
-/* РЈС‚РёР»РёС‚С‹ */
+/* Утилиты */
 .hidden {
     display: none !important;
 }

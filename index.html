@@ -164,6 +164,9 @@
             }
             
             function getFileIcon(filename) {
+                if (!filename || filename.trim() === "") {
+                    return ""; // Не показывать иконку
+                }
                 const ext = filename.split('.').pop().toLowerCase();
                 const icons = {
                     'jpg': 'fas fa-file-image',
@@ -190,6 +193,7 @@
     </script>
 </body>
 </html>
+
 
 
 

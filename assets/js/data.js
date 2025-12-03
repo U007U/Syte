@@ -21,7 +21,7 @@ let subjects = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [
     },
     {
         id: 2,
-        name: "Математика",
+        name: " Выссшая математика",
         teacher: "Петрова Анна Сергеевна",
         files: []
     },

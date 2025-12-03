@@ -76,6 +76,32 @@ window.SubjectData = (function() {
                 }
             ],
             createdAt: "2025-12-03"
+        },
+                {
+            id: 3,
+            name: "Распределительная логистика",
+            teacher: "Синкевич Е.А.",
+            files: [
+                {
+                    filename: "hn5jsjn4jjj45.docx",
+                    name: "Домашняя контрольная работа",
+                    desc: "Делать в отдельной зеленой тетради",
+                    deadline: "до декабря 2025 г."
+                },
+                {
+                    filename: "kjfde56nng8.docx",
+                    name: "Вопросы к зачету",
+                    desc: "Прочитать, выучить",
+                    deadline: ""
+                },
+                {
+                    filename: "kjnfvwe758732vnb43n444.docx",
+                    name: "Вопросы к ЭК",
+                    desc: "Прочитать, выучить",
+                    deadline: ""
+                },
+            ],
+            createdAt: "2025-12-03"
         }
         // Добавьте новый предмет здесь:
         // {

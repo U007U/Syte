@@ -2,8 +2,7 @@
 
 > **Автоматизированная платформа для студентов**  
 > Централизованное хранение заданий по предметам с дедлайнами, описаниями и файлами. Обновление через GitHub.
-
-[![GitHub Pages](https://img.shields.io/badge/GitHub-Pages-181717?style=flat&logo=githubhttpshon](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=yellowhttpssk](https://img.shields.io/badge/Flask-000000?style=flat&logo=flask&logoColor=whitehttps**Что это?**
+Что это?**
 
 **Syte** — веб-приложение для студентов колледжа/вуза.  
 Каждый предмет — отдельная карточка с:

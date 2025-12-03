@@ -10,7 +10,7 @@ let subjects = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [
             {
                 name: "Темы рефератов и задания по эссе",
                 desc: "Все материалы по налогам в одном файле",
-                filename: "налоги_и_налогообложение_темы рефератов + эссе.docx"
+                filename: "NALOGI_TEMY_REFERATOV_ESSE.docx"
             }
         ]
     },
@@ -131,3 +131,4 @@ window.SubjectData = {
     removeFileFromSubject,
     saveData
 };
+

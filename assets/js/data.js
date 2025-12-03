@@ -1,5 +1,4 @@
 ﻿const STORAGE_KEY = 'subjects_data';
-const ADMIN_PASSWORD = 'admin123';
 
 // Начальные данные
 let subjects = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [
@@ -126,11 +125,6 @@ function removeFileFromSubject(subjectId, fileId) {
     return false;
 }
 
-// Проверить пароль админа
-function checkAdminPassword(password) {
-    return password === ADMIN_PASSWORD;
-}
-
 // Экспорт функций
 window.SubjectData = {
     getSubjects,
@@ -140,6 +134,5 @@ window.SubjectData = {
     deleteSubject,
     addFileToSubject,
     removeFileFromSubject,
-    checkAdminPassword,
     saveData
 };

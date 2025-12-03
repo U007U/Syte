@@ -42,6 +42,12 @@ let subjects = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [
         name: "История",
         teacher: "Николаев Дмитрий Петрович",
         files: []
+    },
+    {
+    id: 6,                       // следующий номер (6)
+    name: "Химия",               // название предмета
+    teacher: "Преподаватель",    // имя преподавателя
+    files: []                    // пока файлов нет
     }
 ];
 

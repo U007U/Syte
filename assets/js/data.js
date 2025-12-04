@@ -149,7 +149,7 @@ window.SubjectData = (function() {
                     deadline: "Файлов нет"
                 }
             ],
-            createdAt: "2025-12-03"
+            createdAt: "2025-12-04"
         }
 
         // Добавьте новый предмет здесь:

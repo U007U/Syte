@@ -49,6 +49,7 @@
             <h3><i class="fas fa-info-circle"></i> Как пользоваться</h3>
             <ol>
                 <li>Найдите предмет в списке</li>
+                <li>Нажмите на заголовок предмета, чтобы раскрыть/скрыть задания</li>
                 <li>Скачайте файлы кнопкой "Скачать"</li>
                 <li>Все задания и материалы обновляются автоматически. Для получения актуальной версии обновите страницу (нажмите F5)</li>
             </ol>
@@ -105,6 +106,8 @@
             function renderSubjects() {
                 const subjects = window.SubjectData.getSubjects();
                 const container = document.getElementById('subjectsGrid');
+                
+                // Показываем ВСЕ предметы
                 document.getElementById('totalSubjects').textContent = subjects.length;
                 
                 if (subjects.length === 0) {
@@ -116,6 +119,17 @@
                 subjects.forEach(subject => {
                     const card = createSubjectCard(subject);
                     container.appendChild(card);
+                    
+                    // Автоматически сворачиваем все карточки при загрузке
+                    card.classList.add('collapsed');
+                    
+                    // Проверяем, нужен ли скролл для списка файлов
+                    setTimeout(() => {
+                        const fileList = card.querySelector('.file-list');
+                        if (fileList && fileList.scrollHeight > fileList.clientHeight + 10) {
+                            fileList.classList.add('scrollable');
+                        }
+                    }, 100);
                 });
             }
             
@@ -123,9 +137,14 @@
                 const card = document.createElement('div');
                 card.className = 'subject-card';
                 
+                // Определяем, есть ли файлы
+                const hasFiles = subject.files && subject.files.length > 0;
+                const filesCount = hasFiles ? subject.files.length : 0;
+                
                 // Создаем HTML карточки
                 let filesHTML = '';
-                if (subject.files && subject.files.length > 0) {
+                
+                if (hasFiles) {
                     filesHTML = '<div class="file-list">';
                     subject.files.forEach(file => {
                         const hasFile = file.filename && file.filename.trim() !== "";
@@ -137,8 +156,8 @@
                             <div class="file-item ${!hasFile ? 'no-file-task' : ''}">
                                 ${hasFile ? `<div class="file-icon">${getFileIcon(file.filename)}</div>` : ''}
                                 <div class="file-info">
-                                    <span class="file-name">${escapeHtml(file.name)}</span>
-                                    <p class="file-desc">${escapeHtml(file.desc)}</p>
+                                    <span class="file-name" title="${escapeHtml(file.name)}">${escapeHtml(file.name)}</span>
+                                    <p class="file-desc" title="${escapeHtml(file.desc)}">${escapeHtml(file.desc)}</p>
                                     <small class="file-status ${fileStatus}">
                                         <i class="fas ${fileIcon}"></i> 
                                         ${fileText}
@@ -150,9 +169,9 @@
                                 </div>
                                 ${hasFile ? 
                                     `<a href="files/subjects/${encodeURIComponent(file.filename)}" 
-                                    class="download-btn" 
-                                    download
-                                    title="Скачать файл">
+                                       class="download-btn" 
+                                       download
+                                       title="Скачать файл">
                                         <i class="fas fa-download"></i>
                                     </a>` : 
                                     `<div class="no-download-btn" title="Файл не требуется">
@@ -164,7 +183,7 @@
                     });
                     filesHTML += '</div>';
                 } else {
-                    filesHTML = '<p class="no-files">Нет файлов</p>';
+                    filesHTML = '<p class="no-files">Нет доступных файлов</p>';
                 }
                 
                 card.innerHTML = `
@@ -176,21 +195,37 @@
                                 ${escapeHtml(subject.teacher)}
                             </p>
                         </div>
-                        <span class="subject-badge">${subject.files ? subject.files.length : 0}</span>
+                        <span class="subject-badge">${filesCount}</span>
+                        <i class="fas fa-chevron-up toggle-icon" title="Нажмите, чтобы раскрыть/скрыть задания"></i>
                     </div>
                     ${filesHTML}
                     <div class="subject-footer">
-                        <small><i class="fas fa-database"></i> Данные добавленны </small>
+                        <small><i class="fas fa-database"></i> Данные добавлены</small>
                         <small><i class="fas fa-calendar-plus"></i> ${escapeHtml(subject.createdAt)}</small>
                     </div>
                 `;
+                
+                // Добавляем обработчик клика для аккордеона
+                const header = card.querySelector('.subject-header');
+                
+                header.addEventListener('click', function(e) {
+                    // Не срабатывает при клике на ссылки или кнопки внутри
+                    if (e.target.tagName === 'A' || e.target.tagName === 'BUTTON' || 
+                        e.target.closest('.download-btn') || e.target.closest('.no-download-btn') ||
+                        e.target.closest('.subject-badge')) {
+                        return;
+                    }
+                    
+                    card.classList.toggle('collapsed');
+                    // Вращение стрелки теперь управляется CSS
+                });
                 
                 return card;
             }
             
             function getFileIcon(filename) {
                 if (!filename || filename.trim() === "") {
-                    return '<i class="fas fa-file-question"></i>'; // Иконка для отсутствующего файла
+                    return '<i class="fas fa-file-question"></i>';
                 }
                 const ext = filename.split('.').pop().toLowerCase();
                 const icons = {

@@ -112,7 +112,7 @@ window.SubjectData = (function() {
                     filename: "",
                     name: "Самоподготовка",
                     desc: "1. Что такое Инкотермс(Incoterms). 2. Виды маршрутов перевозки",
-                    deadline: "Файлов нет"
+                    deadline: "до мая 2026 г."
                 }
             ],
             createdAt: "2025-12-03"
@@ -146,7 +146,7 @@ window.SubjectData = (function() {
                     filename: "",
                     name: "В moodl(spo.ggtu.ru пароль - номер студенческого билета)=>мои курсы=>ОП. 08 моделирование логистических процессов => ПЗ. 1, ПЗ. 2, ПЗ. 3",
                     desc: "Сделать и отправить фай на проверку",
-                    deadline: "Файлов нет"
+                    deadline: "до мая 2026 г."
                 }
             ],
             createdAt: "2025-12-04"

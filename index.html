@@ -128,23 +128,37 @@
                 if (subject.files && subject.files.length > 0) {
                     filesHTML = '<div class="file-list">';
                     subject.files.forEach(file => {
+                        const hasFile = file.filename && file.filename.trim() !== "";
+                        const fileStatus = hasFile ? 'has-file' : 'no-file';
+                        const fileText = hasFile ? 'Файл доступен' : 'Файла нет';
+                        const fileIcon = hasFile ? 'fa-file' : 'fa-times-circle';
+                        
                         filesHTML += `
-                            <div class="file-item">
-                                <div class="file-icon">${getFileIcon(file.filename)}</div>
+                            <div class="file-item ${!hasFile ? 'no-file-task' : ''}">
+                                ${hasFile ? `<div class="file-icon">${getFileIcon(file.filename)}</div>` : ''}
                                 <div class="file-info">
                                     <span class="file-name">${escapeHtml(file.name)}</span>
                                     <p class="file-desc">${escapeHtml(file.desc)}</p>
+                                    <small class="file-status ${fileStatus}">
+                                        <i class="fas ${fileIcon}"></i> 
+                                        ${fileText}
+                                    </small>
                                     <small class="file-deadline">
                                         <i class="far fa-calendar-alt"></i> 
                                         ${escapeHtml(file.deadline)}
                                     </small>
                                 </div>
-                                <a href="files/subjects/${encodeURIComponent(file.filename)}" 
-                                   class="download-btn" 
-                                   download
-                                   title="Скачать файл">
-                                    <i class="fas fa-download"></i>
-                                </a>
+                                ${hasFile ? 
+                                    `<a href="files/subjects/${encodeURIComponent(file.filename)}" 
+                                    class="download-btn" 
+                                    download
+                                    title="Скачать файл">
+                                        <i class="fas fa-download"></i>
+                                    </a>` : 
+                                    `<div class="no-download-btn" title="Файл не требуется">
+                                        <i class="fas fa-info-circle"></i>
+                                    </div>`
+                                }
                             </div>
                         `;
                     });

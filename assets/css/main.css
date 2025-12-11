@@ -322,6 +322,22 @@ body {
     font-size: 1rem;
 }
 
+/* Статус файла */
+.file-status {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.file-status.has-file {
+    color: var(--success);
+}
+
+.file-status.no-file {
+    color: var(--danger);
+}
+
 .download-btn {
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     color: white;
@@ -344,6 +360,25 @@ body {
     transform: scale(1.1);
     border-color: white;
     box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.no-download-btn {
+    background: var(--text-light);
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    opacity: 0.7;
+    border: 2px solid transparent;
+}
+
+[data-theme="dark"] .no-download-btn {
+    background: #4b5563;
 }
 
 .no-files {
@@ -542,7 +577,8 @@ body {
         flex-wrap: wrap;
     }
     
-    .download-btn {
+    .download-btn,
+    .no-download-btn {
         margin-top: 10px;
         width: 100%;
         height: 45px;

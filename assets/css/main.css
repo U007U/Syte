@@ -188,7 +188,7 @@ body {
     border: var(--border-width) solid var(--border);
     transition: all 0.3s ease;
     position: relative;
-    overflow: hidden;
+    overflow: hidden; /* ВОССТАНОВЛЕНО: нужно для тени */
 }
 
 .subject-card::before {
@@ -223,8 +223,8 @@ body {
     cursor: pointer;
     user-select: none;
     padding-right: 30px;
-    border-bottom: none; /* Убрали полоску внизу */
-    padding-bottom: 0; /* Убрали отступ */
+    border-bottom: none;
+    padding-bottom: 0;
 }
 
 .subject-title {
@@ -277,13 +277,13 @@ body {
     opacity: 1;
 }
 
-/* ИКОНКИ АККОРДЕОНА - ИСПРАВЛЕНО */
+/* ИКОНКИ АККОРДЕОНА */
 .subject-card .toggle-icon {
-    transform: rotate(0deg); /* Открыто - стрелка вверх */
+    transform: rotate(0deg);
 }
 
 .subject-card.collapsed .toggle-icon {
-    transform: rotate(180deg); /* Закрыто - стрелка вниз */
+    transform: rotate(180deg);
 }
 
 /* Файлы */
@@ -323,25 +323,6 @@ body {
     opacity: 0.8;
 }
 
-/* Показываем индикатор, что есть еще задания */
-.file-list::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 20px;
-    background: linear-gradient(to bottom, transparent, var(--light-bg));
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    pointer-events: none;
-}
-
-/* Показываем градиент только когда есть скролл */
-.subject-card:not(.collapsed) .file-list.scrollable::after {
-    opacity: 1;
-}
-
 .subject-card.collapsed .file-list {
     max-height: 0;
     opacity: 0;
@@ -350,7 +331,7 @@ body {
 
 .file-item {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     padding: 1rem;
     background: var(--light-bg);
     border-radius: 8px;
@@ -359,12 +340,15 @@ body {
     transition: all 0.3s ease;
     position: relative;
     min-height: 80px;
+    overflow: hidden; /* ИЗМЕНЕНО: hidden вместо visible */
 }
 
+/* ОСНОВНОЕ ИСПРАВЛЕНИЕ: ограничиваем тень */
 .subject-card:not(.collapsed) .file-item:hover {
     border-color: var(--primary);
     transform: translateX(5px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15); /* Уменьшил тень */
+    z-index: 5; /* Поднимаем над другими элементами */
 }
 
 .file-icon {
@@ -375,42 +359,38 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .file-info {
     flex: 1;
     min-width: 0;
+    padding-right: 50px;
+    overflow: visible;
 }
 
 .file-name {
-    font-weight: 700;
-    display: block;
-    margin-bottom: 4px;
-    color: var(--text);
     font-size: 1rem;
-    line-height: 1.3;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+    display: block;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+    white-space: normal;
 }
 
 .file-desc {
     font-size: 0.85rem;
     color: var(--text-light);
-    margin-bottom: 6px;
-    line-height: 1.3;
-    display: -webkit-box;
-    display: -moz-box;
-    display: box;
-    -webkit-line-clamp: 2;
-    -moz-line-clamp: 2;
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
-    -moz-box-orient: vertical;
-    box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-height: 2.6em;
+    margin-bottom: 8px; /* Увеличил отступ */
+    line-height: 1.4;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow: visible;
+    max-height: none;
 }
 
 .file-deadline {
@@ -458,13 +438,19 @@ body {
     font-weight: 600;
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     flex-shrink: 0;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
 }
 
 .download-btn:hover {
     background: var(--primary-dark);
-    transform: scale(1.1);
+    transform: translateY(-50%) scale(1.1);
     border-color: white;
     box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    z-index: 10; /* Увеличиваем при наведении */
 }
 
 .no-download-btn {
@@ -481,6 +467,11 @@ body {
     opacity: 0.7;
     border: 2px solid transparent;
     flex-shrink: 0;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
 }
 
 [data-theme="dark"] .no-download-btn {
@@ -664,6 +655,17 @@ body {
     border-image: linear-gradient(45deg, var(--primary), var(--warning)) 1 !important;
 }
 
+/* ДОБАВЛЕНО: Исправление для тени на последних карточках */
+.file-list::after {
+    content: '';
+    display: block;
+    height: 10px;
+    margin-top: -10px;
+    position: relative;
+    z-index: 1;
+    background: transparent;
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
     .subjects-grid {
@@ -699,8 +701,9 @@ body {
     }
     
     .file-item {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         padding: 0.8rem;
+        align-items: flex-start;
     }
     
     .file-icon {
@@ -708,17 +711,32 @@ body {
         margin-right: 10px;
     }
     
+    .file-info {
+        padding-right: 45px;
+    }
+    
     .download-btn {
-    width: 100%;
-    height: 40px;
-    margin-top: 8px;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        margin-top: 0;
+    }
+    
+    .download-btn:hover {
+        transform: translateY(-50%) scale(1.1);
     }
 
     .no-download-btn {
-        width: 45px;
-        height: 45px;
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
         margin-top: 0;
-        align-self: center;
     }
     
     .subject-card:not(.collapsed) .file-list {
@@ -727,6 +745,11 @@ body {
     
     .info-card {
         padding: 1.5rem;
+    }
+    
+    /* Уменьшаем тень на мобильных */
+    .subject-card:not(.collapsed) .file-item:hover {
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
     }
 }
 
